@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Optional, List
 
 from pydantic import BaseModel
 import warnings
@@ -135,8 +135,7 @@ class TaskQueryRequest(BaseModel):
 ######################################################################################################
 class TaskResponse(BaseResponse):
     class TaskResponseData(BaseModel):
-        task_id: str
-        task_type: str = ""
+        videos: List[str]
 
     data: TaskResponseData
 

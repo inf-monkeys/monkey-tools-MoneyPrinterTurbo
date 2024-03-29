@@ -184,4 +184,6 @@ def upload_video_to_s3(video_path):
     with open(video_path, 'rb') as file:
         file_bytes = file.read()
         s3.put_object(Bucket=config.s3.get('bucket_name'), Key=key, Body=file_bytes)
-        return f'{config.s3.get("public_access_url")}/{key}'
+        url = f'{config.s3.get("public_access_url")}/{key}';
+        logger.info(f"Upload video success: {url}", )
+        return url

@@ -30,13 +30,19 @@ def create_video(request: Request, body: TaskVideoRequest):
         result = tm.start(task_id=task_id, params=body)
         task["result"] = result
         logger.success(f"video created: {utils.to_json(task)}")
-        videos = result['videos']
+        video_paths = result['videos']
         if config.s3.get('enabled'):
-            task['videos'] = []
-            for video_path in videos:
+            videos = []
+            for video_path in video_paths:
                 video_url = utils.upload_video_to_s3(video_path)
-                task['videos'].append(video_url)
-        return utils.get_response(200, task)
+                videos.append(video_url)
+            return utils.get_response(200, {
+                "videos": videos
+            })
+        else:
+            return utils.get_response(200, {
+                "videos": video_paths
+            })
     except ValueError as e:
         raise HttpException(task_id=task_id, status_code=400, message=f"{request_id}: {str(e)}")
 
