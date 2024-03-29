@@ -114,7 +114,7 @@ def download_videos(task_id: str,
     video_paths = []
     save_dir = utils.task_dir(task_id)
 
-    if video_contact_mode.value == VideoConcatMode.random.value:
+    if video_contact_mode == VideoConcatMode.random.value:
         random.shuffle(valid_video_items)
 
     total_duration = 0.0

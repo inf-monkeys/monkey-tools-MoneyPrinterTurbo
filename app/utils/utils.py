@@ -1,10 +1,14 @@
 import os
 import threading
 from typing import Any
+import uuid
 from loguru import logger
 import json
 from uuid import uuid4
 import urllib3
+import boto3
+from botocore.client import Config
+from app.config import config
 
 from app.models import const
 
@@ -165,3 +169,19 @@ def split_string_by_punctuations(s):
             result.append(txt.strip())
             txt = ""
     return result
+
+def upload_video_to_s3(video_path):
+    s3 = boto3.client(
+        "s3",
+        endpoint_url=config.s3.get('endpoint_url'),
+        aws_access_key_id=config.s3.get('aws_access_key_id'),
+        aws_secret_access_key=config.s3.get('aws_secret_access_key'),
+        region_name=config.s3.get('region_name'),
+        config=Config(s3={'addressing_style': config.s3.get('addressing_style')})
+    )
+    logger.info(f"Start to upload {video_path} to s3")
+    key = f'artworks/{uuid.uuid4()}.mp4'
+    with open(video_path, 'rb') as file:
+        file_bytes = file.read()
+        s3.put_object(Bucket=config.s3.get('bucket_name'), Key=key, Body=file_bytes)
+        return f'{config.s3.get("public_access_url")}/{key}'

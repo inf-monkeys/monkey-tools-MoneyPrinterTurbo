@@ -2,6 +2,7 @@ import os
 import socket
 import tomli
 from loguru import logger
+from app.config import config
 
 root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 config_file = f"{root_dir}/config.toml"
@@ -20,6 +21,7 @@ with open(config_file, mode="rb") as fp:
 app = _cfg.get("app", {})
 whisper = _cfg.get("whisper", {})
 pexels = _cfg.get("pexels", {})
+s3 = _cfg.get('s3', {})
 
 hostname = socket.gethostname()
 

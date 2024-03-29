@@ -117,3 +117,13 @@
         ### Doc: https://requests.readthedocs.io/en/latest/user/advanced/#proxies
         # http = "http://10.10.1.10:3128"
         # https = "http://10.10.1.10:1080"
+
+[s3]
+    enabled = false
+    endpoint_url = ""
+    aws_access_key_id = ""
+    aws_secret_access_key = ""
+    region_name = ""
+    addressing_style = "virtual"
+    bucket_name = ""
+    public_access_url = ""

@@ -9,6 +9,7 @@ from app.models.exception import HttpException
 from app.models.schema import TaskVideoRequest, TaskQueryResponse, TaskResponse, TaskQueryRequest
 from app.services import task as tm
 from app.utils import utils
+from app.config import config
 
 # 认证依赖项
 # router = new_router(dependencies=[Depends(base.verify_token)])
@@ -29,6 +30,12 @@ def create_video(request: Request, body: TaskVideoRequest):
         result = tm.start(task_id=task_id, params=body)
         task["result"] = result
         logger.success(f"video created: {utils.to_json(task)}")
+        videos = result['videos']
+        if config.s3.get('enabled'):
+            task['videos'] = []
+            for video_path in videos:
+                video_url = utils.upload_video_to_s3(video_path)
+                task['videos'].append(video_url)
         return utils.get_response(200, task)
     except ValueError as e:
         raise HttpException(task_id=task_id, status_code=400, message=f"{request_id}: {str(e)}")

@@ -50,7 +50,7 @@ def combine_videos(combined_video_path: str,
     # Add downloaded clips over and over until the duration of the audio (max_duration) has been reached
     while video_duration < audio_duration:
         # random video_paths order
-        if video_concat_mode.value == VideoConcatMode.random.value:
+        if video_concat_mode == VideoConcatMode.random.value:
             random.shuffle(video_paths)
 
         for video_path in video_paths:

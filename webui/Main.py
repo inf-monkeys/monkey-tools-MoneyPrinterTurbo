@@ -206,6 +206,7 @@ with middle_panel:
             replace("en-US", "英文").
             replace("Neural", "") for
             voice in VoiceNames}
+        
         selected_friendly_name = st.selectbox("朗读声音", options=list(friendly_names.values()))
         voice_name = list(friendly_names.keys())[list(friendly_names.values()).index(selected_friendly_name)]
         cfg.voice_name = voice_name
